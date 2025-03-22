@@ -151,12 +151,12 @@
 			) satisfies ToolFront[]
 	);
 
-	let showWebSearch = $derived(!assistant);
-	let showImageGen = $derived(modelHasTools && !assistant);
-	let showFileUpload = $derived((modelIsMultimodal || modelHasTools) && mimeTypes.length > 0);
-	let showExtraTools = $derived(modelHasTools && !assistant);
+	let showWebSearch = false;
+	let showImageGen = false;
+	let showFileUpload = false;
+	let showExtraTools = false;
 
-	let showNoTools = $derived(!showWebSearch && !showImageGen && !showFileUpload && !showExtraTools);
+	let showNoTools = false;
 </script>
 
 <div class="flex min-h-full flex-1 flex-col" onpaste={onPaste}>

@@ -117,7 +117,7 @@
 			{/if}
 
 			<p class="text-sm text-gray-500">
-				Model: <span class="font-semibold"> {assistant?.modelId} </span>
+				Modelo: <span class="font-semibold"> {assistant?.modelId} </span>
 				<span class="text-gray-300">•</span> Created by
 				<a class="underline" href="{base}/assistants?user={assistant?.createdByName}">
 					{assistant?.createdByName}
@@ -139,7 +139,7 @@
 						}}
 					>
 						<CarbonChat class="mr-1.5 text-sm" />
-						New chat
+						Nuevo Chat
 					</button>
 				</div>
 				{#if assistant?.createdByMe}
@@ -364,7 +364,7 @@
 				</ul>
 			</div>
 		{/if}
-		{#if hasRag}
+		{#if hasRag && false}
 			<div class="mt-4">
 				<div class="mb-1 flex items-center gap-1">
 					<span

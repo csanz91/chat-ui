@@ -386,18 +386,6 @@
 							}
 						}}
 					/>
-				{:else if messages && lastMessage && lastMessage.interrupted && !isReadOnly}
-					<div class="ml-auto gap-2">
-						<ContinueBtn
-							onClick={() => {
-								if (lastMessage && lastMessage.ancestors) {
-									dispatch("continue", {
-										id: lastMessage?.id,
-									});
-								}
-							}}
-						/>
-					</div>
 				{/if}
 			</div>
 			<form
@@ -418,11 +406,11 @@
 						class:paste-glow={pastedLongContent}
 					>
 						{#if lastIsError}
-							<ChatInput value="Sorry, something went wrong. Please try again." disabled={true} />
+							<ChatInput value="Lo siento, algo salió mal. Por favor, inténtalo de nuevo." disabled={true} />
 						{:else}
 							<ChatInput
 								{assistant}
-								placeholder={isReadOnly ? "This conversation is read-only." : "Ask anything"}
+								placeholder={isReadOnly ? "This conversation is read-only." : "Pregunta lo que quieras"}
 								{loading}
 								bind:value={message}
 								bind:files
@@ -473,14 +461,10 @@
 				class="mt-2 flex justify-between self-stretch px-1 text-xs text-gray-400/90 max-md:mb-2 max-sm:gap-2"
 			>
 				<p>
-					Model:
+					Modelo:
 					{#if !assistant}
 						{#if models.find((m) => m.id === currentModel.id)}
-							<a
-								href="{base}/settings/{currentModel.id}"
-								class="inline-flex items-center hover:underline"
-								>{currentModel.displayName}<CarbonCaretDown class="text-xxs" /></a
-							>
+							{currentModel.displayName}
 						{:else}
 							<span class="inline-flex items-center line-through dark:border-gray-700">
 								{currentModel.id}
@@ -500,26 +484,7 @@
 							</span>
 						{/if}
 					{/if}
-					<span class="max-sm:hidden">·</span><br class="sm:hidden" /> Generated content may be inaccurate
-					or false.
 				</p>
-				{#if messages.length}
-					<button
-						class="flex flex-none items-center hover:text-gray-400 max-sm:rounded-lg max-sm:bg-gray-50 max-sm:px-2.5 dark:max-sm:bg-gray-800"
-						type="button"
-						class:hover:underline={!isSharedRecently}
-						onclick={onShare}
-						disabled={isSharedRecently}
-					>
-						{#if isSharedRecently}
-							<CarbonCheckmark class="text-[.6rem] sm:mr-1.5 sm:text-green-600" />
-							<div class="text-green-600 max-sm:hidden">Link copied to clipboard</div>
-						{:else}
-							<CarbonExport class="sm:text-primary-500 text-[.6rem] sm:mr-1.5" />
-							<div class="max-sm:hidden">Share this conversation</div>
-						{/if}
-					</button>
-				{/if}
 			</div>
 		</div>
 	</div>

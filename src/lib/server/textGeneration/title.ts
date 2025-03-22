@@ -14,10 +14,10 @@ export async function* generateTitleForConversation(
 	try {
 		const userMessage = conv.messages.find((m) => m.from === "user");
 		// HACK: detect if the conversation is new
-		if (conv.title !== "New Chat" || !userMessage) return;
+		if (conv.title !== "Nuevo Chat" || !userMessage) return;
 
 		const prompt = userMessage.content;
-		const title = (await generateTitle(prompt)) ?? "New Chat";
+		const title = (await generateTitle(prompt)) ?? "Nuevo Chat";
 
 		yield {
 			type: MessageUpdateType.Title,
@@ -57,7 +57,7 @@ export async function generateTitle(prompt: string) {
 				},
 			],
 			preprompt:
-				"The task is to generate conversation titles based on text snippets. You'll never answer the provided question directly, but instead summarize the user's request into a short title.",
+				"The task is to generate conversation titles based on text snippets. You'll never answer the provided question directly, but instead summarize the user's request into a short title. Always respond in Spanish.",
 			tool: titleTool,
 			endpoint,
 		});
@@ -74,7 +74,7 @@ export async function generateTitle(prompt: string) {
 		generateFromDefaultEndpoint({
 			messages: [{ from: "user", content: prompt }],
 			preprompt:
-				"You are a summarization AI. Summarize the user's request into a single short sentence of four words or less. Do not try to answer it, only summarize the user's query. Always start your answer with an emoji relevant to the summary",
+				"You are a summarization AI. Summarize the user's request into a single short sentence of four words or less. Do not try to answer it, only summarize the user's query. Always start your answer with an emoji relevant to the summary. Always respond in spanish.",
 			generateSettings: {
 				max_new_tokens: 30,
 			},

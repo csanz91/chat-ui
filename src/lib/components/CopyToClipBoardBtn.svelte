@@ -62,7 +62,7 @@
 
 <button
 	class={classNames}
-	title={"Copy to clipboard"}
+	title={"Copiar al portapapeles"}
 	type="button"
 	onclick={() => {
 		onClick?.();

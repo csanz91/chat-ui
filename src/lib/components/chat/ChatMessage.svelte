@@ -257,7 +257,7 @@
 				{/if}
 				<button
 					class="btn rounded-sm p-1 text-sm text-gray-400 hover:text-gray-500 focus:ring-0 dark:text-gray-400 dark:hover:text-gray-300"
-					title="Retry"
+					title="Reintentar"
 					type="button"
 					onclick={() => {
 						dispatch("retry", { id: message.id });

@@ -39,7 +39,7 @@ export class Database {
 		});
 
 		this.client.connect().catch((err) => {
-			logger.error(err, "Connection error");
+			logger.error(err, "Error de conexion con el modelo de IA");
 			process.exit(1);
 		});
 		this.client.db(env.MONGODB_DB_NAME + (import.meta.env.MODE === "test" ? "-test" : ""));

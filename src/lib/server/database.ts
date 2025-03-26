@@ -22,12 +22,19 @@ import { onExit } from "./exitHandler";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { existsSync, mkdirSync } from "fs";
-import { findRepoRoot } from "./findRepoRoot";
 
 export const CONVERSATION_STATS_COLLECTION = "conversations.stats";
 
-export const DB_FOLDER =
-	env.MONGO_STORAGE_PATH || join(findRepoRoot(dirname(fileURLToPath(import.meta.url))), "db");
+function findRepoRoot(startPath: string): string {
+	let currentPath = startPath;
+	while (currentPath !== "/") {
+		if (existsSync(join(currentPath, "package.json"))) {
+			return currentPath;
+		}
+		currentPath = dirname(currentPath);
+	}
+	throw new Error("Could not find repository root (no package.json found)");
+}
 
 export class Database {
 	private client?: MongoClient;
@@ -39,17 +46,24 @@ export class Database {
 		if (!env.MONGODB_URL) {
 			logger.warn("No MongoDB URL found, using in-memory server");
 
-			logger.info(`Using database path: ${DB_FOLDER}`);
+			// Find repo root by looking for package.json
+			const currentFilePath = fileURLToPath(import.meta.url);
+			const repoRoot = findRepoRoot(dirname(currentFilePath));
+
+			// Use MONGO_STORAGE_PATH from env if set, otherwise use db/ in repo root
+			const dbPath = env.MONGO_STORAGE_PATH || join(repoRoot, "db");
+
+			logger.info(`Using database path: ${dbPath}`);
 			// Create db directory if it doesn't exist
-			if (!existsSync(DB_FOLDER)) {
-				logger.info(`Creating database directory at ${DB_FOLDER}`);
-				mkdirSync(DB_FOLDER, { recursive: true });
+			if (!existsSync(dbPath)) {
+				logger.info(`Creating database directory at ${dbPath}`);
+				mkdirSync(dbPath, { recursive: true });
 			}
 
 			this.mongoServer = await MongoMemoryServer.create({
 				instance: {
 					dbName: env.MONGODB_DB_NAME + (import.meta.env.MODE === "test" ? "-test" : ""),
-					dbPath: DB_FOLDER,
+					dbPath,
 				},
 				binary: {
 					version: "7.0.18",

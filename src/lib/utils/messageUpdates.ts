@@ -89,11 +89,11 @@ export async function fetchMessageUpdates(
 		const errorMessage = await response
 			.json()
 			.then((obj) => obj.message)
-			.catch(() => `Request failed with status code ${response.status}: ${response.statusText}`);
+			.catch(() => `Solicitud fallida con código de estado ${response.status}: ${response.statusText}`);
 		throw Error(errorMessage);
 	}
 	if (!response.body) {
-		throw Error("Body not defined");
+		throw Error("Sin datos en la respuesta");
 	}
 
 	if (!(envPublic.PUBLIC_SMOOTH_UPDATES === "true")) {
@@ -110,7 +110,7 @@ async function* endpointStreamToIterator(
 	abortController: AbortController
 ): AsyncGenerator<MessageUpdate> {
 	const reader = response.body?.pipeThrough(new TextDecoderStream()).getReader();
-	if (!reader) throw Error("Response for endpoint had no body");
+	if (!reader) throw Error("La respuesta no tenia datos");
 
 	// Handle any cases where we must abort
 	reader.closed.then(() => abortController.abort());

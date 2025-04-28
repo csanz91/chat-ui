@@ -34,7 +34,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 	const convCount = await collections.conversations.countDocuments(authCondition(locals));
 
 	if (usageLimits?.conversations && convCount > usageLimits?.conversations) {
-		error(429, "You have reached the maximum number of conversations. Delete some to continue.");
+		error(429, "Has llegado al límite de conversaciones, por favor elimina alguna conversación vieja");
 	}
 
 	const model = models.find((m) => (m.id || m.name) === values.model);
@@ -64,7 +64,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 		});
 
 		if (!conversation) {
-			error(404, "Conversation not found");
+			error(404, "La conversación no existe");
 		}
 
 		title = conversation.title;
@@ -79,7 +79,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 	embeddingModel ??= model.embeddingModel ?? defaultEmbeddingModel.name;
 
 	if (model.unlisted) {
-		error(400, "Can't start a conversation with an unlisted model");
+		error(400, "No puedes crear una conversación con este modelo");
 	}
 
 	// get preprompt from assistant if it exists
